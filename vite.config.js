@@ -10,5 +10,10 @@ export default defineConfig({
     setupFiles: ['src/vitest/setupTests.js'],
     reporters: ['verbose'],
     restoreMocks: true
+  },
+  resolve: {
+    alias: {
+      $routes: 'src/routes'
+    }
   }
 });

@@ -19,7 +19,7 @@ describe('Birthday.svelte component', () => {
     expect(screen.queryByText('Adam')).toBeVisible();
   });
 
-  it('should display another peron name', () => {
+  it('should display another person dob', () => {
     render(Birthday, { ...examplePerson, dob: '11-01-2000' });
     expect(screen.queryByText('11-01-2000')).toBeVisible();
   });
