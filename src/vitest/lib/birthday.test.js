@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/svelte';
 import Birthday from '$lib/Birthday.svelte';
 
-describe('Birthday.svelte component', () => {
+describe('Birthday.svelte', () => {
   const examplePerson = { name: 'John', dob: '10-01-2000' };
 
   it('should display a person name', () => {
@@ -10,7 +10,7 @@ describe('Birthday.svelte component', () => {
   });
 
   it('should display person dob', () => {
-    render(Birthday, examplePerson)
+    render(Birthday, examplePerson);
     expect(screen.queryByText('10-01-2000')).toBeVisible();
   });
 
@@ -20,7 +20,10 @@ describe('Birthday.svelte component', () => {
   });
 
   it('should display another person dob', () => {
-    render(Birthday, { ...examplePerson, dob: '11-01-2000' });
+    render(Birthday, {
+      ...examplePerson,
+      dob: '11-01-2000'
+    });
     expect(screen.queryByText('11-01-2000')).toBeVisible();
   });
 });

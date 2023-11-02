@@ -1,12 +1,12 @@
 <script>
   import Birthday from '$lib/Birthday.svelte';
+  import BirthdayForm from '$lib/BirthdayForm.svelte';
 
   /** @type {import('./$types').PageData} */
   export let data;
 </script>
 
 <h1>Birthday list</h1>
-
 <ol>
   {#each data.birthdays as birthday}
     <li>
@@ -14,6 +14,10 @@
     </li>
   {/each}
 </ol>
+<h1>Add a new birthday</h1>
+<div>
+  <BirthdayForm />
+</div>
 
 <style>
   ol {
@@ -21,7 +25,8 @@
     padding-left: 0;
   }
 
-  li {
+  li,
+  div {
     padding: 10px;
     margin: 5px;
     border: 1px solid #ccc;
