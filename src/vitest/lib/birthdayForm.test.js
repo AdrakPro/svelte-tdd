@@ -28,6 +28,13 @@ describe('BirthdayForm.svelte', () => {
       expect(field).toBeVisible();
       expect(field.name).toEqual('name');
     });
+
+    it('should has a default blank value', () => {
+      render(BirthdayForm);
+      expect(screen.queryByLabelText('Name')).toHaveValue(
+        ''
+      );
+    });
   });
 
   describe('date of birth field', () => {
@@ -39,6 +46,13 @@ describe('BirthdayForm.svelte', () => {
       );
       expect(field).toBeVisible();
       expect(field.name).toEqual('dob');
+    });
+
+    it('should has a default blank value', () => {
+      render(BirthdayForm);
+      expect(
+        screen.queryByLabelText('Date of birth')
+      ).toHaveValue('');
     });
   });
 });

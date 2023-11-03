@@ -13,3 +13,20 @@ test('saves a new birthday', async ({ page }) => {
   await page.getByRole('button').click();
   await expect(page.getByText('Persephone')).toBeVisible();
 });
+
+test('does not save a birthday if there are validation errors', async ({
+  page
+}) => {
+  await page.goto('/birthdays');
+  await page.getByLabel('Name').fill('Persephone');
+  await page.getByLabel('Date of birth').fill('invalid');
+  await page.getByRole('button').click();
+  await expect(
+    page.getByText('Persephone')
+  ).not.toBeVisible();
+  await expect(
+    page.getByText(
+      'Please provide a date of birth in the YYYY-MM-DD format'
+    )
+  ).toBeVisible();
+});

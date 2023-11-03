@@ -4,6 +4,7 @@
 
   /** @type {import('./$types').PageData} */
   export let data;
+  export let form = undefined;
 </script>
 
 <h1>Birthday list</h1>
@@ -16,7 +17,7 @@
 </ol>
 <h1>Add a new birthday</h1>
 <div>
-  <BirthdayForm />
+  <BirthdayForm {form} />
 </div>
 
 <style>

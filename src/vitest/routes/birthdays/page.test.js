@@ -1,10 +1,5 @@
 import Page from '$routes/birthdays/+page.svelte';
 import { render, screen } from '@testing-library/svelte';
-import { createFormDataRequest } from '../../../factories/formDataRequest.js';
-import {
-  actions,
-  load
-} from '$routes/birthdays/+page.server.js';
 
 describe('/birthdays', () => {
   const birthdays = [
@@ -22,20 +17,12 @@ describe('/birthdays', () => {
     render(Page, { data: { birthdays } });
     expect(screen.queryByRole('form')).toBeVisible();
   });
-});
 
-describe('/birthdays - default action', () => {
-  const person = {
-    name: 'Zeus',
-    dob: '2009-02-02'
-  };
-
-  it('should add a new birthday into the list', async () => {
-    const request = createFormDataRequest(person);
-
-    await actions.default({ request });
-    expect(load().birthdays).toContainEqual(
-      expect.objectContaining(person)
-    );
+  it('should pass any information to the BirthdayForm', () => {
+    render(Page, {
+      data: { birthdays },
+      form: { error: 'An error' }
+    });
+    expect(screen.queryByText('An error')).toBeVisible();
   });
 });
