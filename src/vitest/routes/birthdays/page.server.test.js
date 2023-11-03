@@ -2,11 +2,12 @@ import {
   actions,
   load
 } from '$routes/birthdays/+page.server.js';
-import { createFormDataRequest } from '../../../factories/formDataRequest.js';
+import { createFormDataRequest } from '$factories/formDataRequest.js';
 import { beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
 import BirthdayForm from '$lib/BirthdayForm.svelte';
 import * as birthdayRepository from '$lib/server/birthdayRepository.js';
+import { createBirthday } from '$factories/birthday.js';
 
 describe('/birthdays - load', () => {
   it('should return a fixture of two items', () => {
@@ -26,40 +27,45 @@ describe('/birthdays - load', () => {
 
 describe('/birthdays - default action', () => {
   beforeEach(birthdayRepository.clear);
-  const person = {
-    name: 'Zeus',
-    dob: '2009-02-02'
-  };
+
+  const performFormAction = (formData) =>
+    actions.default({
+      request: createFormDataRequest(formData)
+    });
+
+  const storedId = () => birthdayRepository.getAll()[0].id;
 
   it('should add a new birthday into the list', async () => {
-    const request = createFormDataRequest(person);
-
-    await actions.default({ request });
+    await performFormAction(
+      createBirthday('Zeus', '2009-02-02')
+    );
     expect(birthdayRepository.getAll()).toContainEqual(
-      expect.objectContaining(person)
+      expect.objectContaining({
+        name: 'Zeus',
+        dob: '2009-02-02'
+      })
     );
   });
 
   it('should save an unique ids onto each new birthday', async () => {
-    const request = createFormDataRequest(person);
-    await actions.default({ request });
-    await actions.default({ request });
+    const request = createBirthday('Zeus', '2009-02-02');
+
+    await performFormAction(request);
+    await performFormAction(request);
     expect(birthdayRepository.getAll()[0].id).not.toEqual(
       birthdayRepository.getAll()[1].id
     );
   });
 
-  const storedId = () => birthdayRepository.getAll()[0].id;
-
   it('should update an entry that shares the same id', async () => {
-    let request = createFormDataRequest(person);
-    await actions.default({ request });
-    request = createFormDataRequest({
-      id: storedId(),
-      name: 'Zeus Ex',
-      dob: '2007-02-02'
-    });
-    await actions.default({ request });
+    await performFormAction(
+      createBirthday('Zeus', '2009-02-02')
+    );
+    await performFormAction(
+      createBirthday('Zeus Ex', '2007-02-02', {
+        id: storedId()
+      })
+    );
     expect(birthdayRepository.getAll()).toHaveLength(1);
     expect(birthdayRepository.getAll()).toContainEqual({
       id: storedId(),
@@ -70,20 +76,20 @@ describe('/birthdays - default action', () => {
 
   describe('validation errors', () => {
     describe('when the name is not provided', () => {
-      const invalidPerson = { name: '', dob: '2009-02-02' };
       let result;
 
       beforeEach(async () => {
-        const request =
-          createFormDataRequest(invalidPerson);
-        result = await actions.default({ request });
+        result = await performFormAction(
+          createBirthday('', '2009-02-02')
+        );
       });
 
       it('should not save the birthday', () => {
-        expect(
-          birthdayRepository.getAll()
-        ).not.toContainEqual(
-          expect.objectContaining(invalidPerson)
+        expect(load().birthdays).not.toContainEqual(
+          expect.objectContaining({
+            name: '',
+            dob: '2009-02-02'
+          })
         );
       });
 
@@ -105,23 +111,22 @@ describe('/birthdays - default action', () => {
     });
 
     describe('when the date of birth is not provided', () => {
-      const invalidPerson = {
-        name: 'Hercules',
-        dob: 'unknown'
-      };
       let result;
 
       beforeEach(async () => {
-        const request =
-          createFormDataRequest(invalidPerson);
-        result = await actions.default({ request });
+        result = await performFormAction(
+          createBirthday('Hercules', 'unknown')
+        );
       });
 
       it('should not save the birthday', () => {
         expect(
           birthdayRepository.getAll()
         ).not.toContainEqual(
-          expect.objectContaining(invalidPerson)
+          expect.objectContaining({
+            name: 'Hercules',
+            dob: 'unknown'
+          })
         );
       });
 
@@ -168,12 +173,11 @@ describe('/birthdays - default action', () => {
     describe('when the id is unknown', () => {
       let result;
       beforeEach(async () => {
-        const request = createFormDataRequest({
-          id: 'unknown',
-          name: 'Hercules',
-          dob: '2009-01-02'
-        });
-        result = await actions.default({ request });
+        result = await performFormAction(
+          createBirthday('Hercules', '2009-01-01', {
+            id: 'unknown'
+          })
+        );
       });
 
       it('should not save the birthday', () => {
@@ -198,30 +202,24 @@ describe('/birthdays - default action', () => {
 
     describe('when replacing an item', () => {
       beforeEach(async () => {
-        let request = createFormDataRequest({
-          name: 'Zeus',
-          dob: '2009-02-02'
-        });
-        await actions.default({ request });
+        await performFormAction(
+          createBirthday('Hercules', '2009-01-02')
+        );
       });
 
       it('should return the id when an empty name is provided', async () => {
-        const request = createFormDataRequest({
-          id: storedId(),
-          name: '',
-          dob: '1982-05-01'
-        });
-        const result = await actions.default({ request });
+        const result = await performFormAction(
+          createBirthday('', '1982-05-01', {
+            id: storedId()
+          })
+        );
         expect(result.data).toContain({ id: storedId() });
       });
 
       it('should return the id when an empty date of birth is provided', async () => {
-        const request = createFormDataRequest({
-          id: storedId(),
-          name: 'Hercules',
-          dob: ''
-        });
-        const result = await actions.default({ request });
+        const result = await performFormAction(
+          createBirthday('Hercules', '', { id: storedId() })
+        );
         expect(result.data).toContain({ id: storedId() });
       });
     });
