@@ -18,6 +18,9 @@
     Date of birth
     <input type="text" name="dob" value={form?.dob || ''} />
   </label>
+  {#if form?.id}
+    <input type="hidden" name="id" value={form.id} />
+  {/if}
   <input type="submit" value="Save" />
 </form>
 

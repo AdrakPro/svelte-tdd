@@ -1,11 +1,30 @@
 import Page from '$routes/birthdays/+page.svelte';
 import { render, screen } from '@testing-library/svelte';
+import { beforeEach } from 'vitest';
+import { click } from '@testing-library/user-event';
 
 describe('/birthdays', () => {
   const birthdays = [
-    { name: 'Hercules', dob: '1994-02-02' },
-    { name: 'Athena', dob: '1989-01-01' }
+    {
+      id: '123',
+      name: 'Hercules',
+      dob: '1994-02-02'
+    },
+    {
+      id: '234',
+      name: 'Athena',
+      dob: '1989-01-01'
+    }
   ];
+
+  it('should display a heading for "Add a new birthday"', () => {
+    render(Page, { data: { birthdays } });
+    expect(
+      screen.queryByRole('heading', {
+        name: 'Add a new birthday'
+      })
+    ).toBeVisible();
+  });
 
   it('should display birthday list', () => {
     render(Page, { data: { birthdays } });
@@ -24,5 +43,73 @@ describe('/birthdays', () => {
       form: { error: 'An error' }
     });
     expect(screen.queryByText('An error')).toBeVisible();
+  });
+
+  it('should display an Edit button for each birthday in the lsit', () => {
+    render(Page, { data: { birthdays } });
+    expect(
+      screen.queryAllByRole('button', { name: 'Edit' })
+    ).toHaveLength(2);
+  });
+
+  describe('when editing an existing birthday', () => {
+    beforeEach(() => render(Page, { data: { birthdays } }));
+    const firstEditButton = () =>
+      screen.queryAllByRole('button', {
+        name: 'Edit'
+      })[0];
+
+    it('hides the existing birthday information', async () => {
+      await click(firstEditButton());
+      expect(screen.queryByText('Hercules')).toBeNull();
+    });
+
+    it('should hide the birthday form for adding new birthdays', async () => {
+      await click(firstEditButton());
+      expect(
+        screen.queryByRole('heading', {
+          name: 'Add a new birthday'
+        })
+      ).toBeNull();
+    });
+
+    it('should display the birthday form for editing', async () => {
+      await click(firstEditButton());
+      expect(screen.getByLabelText('Name')).toHaveValue(
+        'Hercules'
+      );
+    });
+
+    it('should hide all the Edit buttons', async () => {
+      await click(firstEditButton());
+      expect(
+        screen.queryByRole('button', { name: 'Edit' })
+      ).toBeNull();
+    });
+  });
+
+  it('should open the form in editing mode if a form id is passed in', () => {
+    render(Page, {
+      data: {
+        birthdays: [
+          {
+            id: '123',
+            name: 'Hercules',
+            dob: '1994-02-02'
+          }
+        ]
+      },
+      form: {
+        id: '123',
+        name: 'Hercules',
+        dob: 'bad dob',
+        error: 'An error'
+      }
+    });
+    expect(
+      screen.queryByRole('heading', {
+        name: 'Add a new birthday'
+      })
+    ).toBeNull();
   });
 });

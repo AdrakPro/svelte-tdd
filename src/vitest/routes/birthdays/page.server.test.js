@@ -12,8 +12,14 @@ describe('/birthdays - load', () => {
   it('should return a fixture of two items', () => {
     const { birthdays } = load();
     expect(birthdays).toEqual([
-      { name: 'Hercules', dob: '1994-02-02' },
-      { name: 'Athena', dob: '1989-01-01' }
+      expect.objectContaining({
+        name: 'Hercules',
+        dob: '1994-02-02'
+      }),
+      expect.objectContaining({
+        name: 'Athena',
+        dob: '1989-01-01'
+      })
     ]);
   });
 });
@@ -32,6 +38,34 @@ describe('/birthdays - default action', () => {
     expect(birthdayRepository.getAll()).toContainEqual(
       expect.objectContaining(person)
     );
+  });
+
+  it('should save an unique ids onto each new birthday', async () => {
+    const request = createFormDataRequest(person);
+    await actions.default({ request });
+    await actions.default({ request });
+    expect(birthdayRepository.getAll()[0].id).not.toEqual(
+      birthdayRepository.getAll()[1].id
+    );
+  });
+
+  const storedId = () => birthdayRepository.getAll()[0].id;
+
+  it('should update an entry that shares the same id', async () => {
+    let request = createFormDataRequest(person);
+    await actions.default({ request });
+    request = createFormDataRequest({
+      id: storedId(),
+      name: 'Zeus Ex',
+      dob: '2007-02-02'
+    });
+    await actions.default({ request });
+    expect(birthdayRepository.getAll()).toHaveLength(1);
+    expect(birthdayRepository.getAll()).toContainEqual({
+      id: storedId(),
+      name: 'Zeus Ex',
+      dob: '2007-02-02'
+    });
   });
 
   describe('validation errors', () => {
@@ -129,6 +163,67 @@ describe('/birthdays - default action', () => {
       expect(
         screen.queryByLabelText('Date of birth')
       ).toHaveValue('2000-01-01');
+    });
+
+    describe('when the id is unknown', () => {
+      let result;
+      beforeEach(async () => {
+        const request = createFormDataRequest({
+          id: 'unknown',
+          name: 'Hercules',
+          dob: '2009-01-02'
+        });
+        result = await actions.default({ request });
+      });
+
+      it('should not save the birthday', () => {
+        expect(load().birthdays).not.toContainEqual(
+          expect.objectContaining({
+            name: 'Hercules',
+            dob: 'unknown'
+          })
+        );
+      });
+
+      it('should return a 422 code', () => {
+        expect(result.status).toEqual(422);
+      });
+
+      it('should return a useful message', () => {
+        expect(result.data.error).toEqual(
+          'An unknown ID was provided.'
+        );
+      });
+    });
+
+    describe('when replacing an item', () => {
+      beforeEach(async () => {
+        let request = createFormDataRequest({
+          name: 'Zeus',
+          dob: '2009-02-02'
+        });
+        await actions.default({ request });
+      });
+
+      it('should return the id when an empty name is provided', async () => {
+        const request = createFormDataRequest({
+          id: storedId(),
+          name: '',
+          dob: '1982-05-01'
+        });
+        const result = await actions.default({ request });
+        expect(result.data).toContain({ id: storedId() });
+      });
+
+      it('should return the id when an empty date of birth is provided', async () => {
+        const request = createFormDataRequest({
+          id: storedId(),
+          name: 'Hercules',
+          dob: ''
+        });
+        const result = await actions.default({ request });
+        expect(result.data).toContain({ id: storedId() });
+      });
     });
   });
 });
