@@ -3,7 +3,6 @@ import {
   load
 } from '$routes/birthdays/+page.server.js';
 import { createFormDataRequest } from '$factories/formDataRequest.js';
-import { beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
 import BirthdayForm from '$lib/BirthdayForm.svelte';
 import * as birthdayRepository from '$lib/server/birthdayRepository.js';
@@ -93,18 +92,9 @@ describe('/birthdays - default action', () => {
         );
       });
 
-      it('should return a 422 code', () => {
-        expect(result.status).toEqual(422);
-      });
-
-      it('should return a useful message', () => {
-        expect(result.data.error).toEqual(
-          'Please provide a name.'
-        );
-      });
-
-      it('should return the data back', () => {
-        expect(result.data).toContain({
+      it('should return a complete error response', () => {
+        expect(result).toBeUnprocessableEntity({
+          error: 'Please provide a name.',
           dob: '2009-02-02'
         });
       });
@@ -130,18 +120,10 @@ describe('/birthdays - default action', () => {
         );
       });
 
-      it('should return a 422 code', () => {
-        expect(result.status).toEqual(422);
-      });
-
-      it('should return a useful message', () => {
-        expect(result.data.error).toEqual(
-          'Please provide a date of birth in the YYYY-MM-DD format.'
-        );
-      });
-
-      it('should return the data back, including the incorrect one', () => {
-        expect(result.data).toContain({
+      it('should return a complete error response', () => {
+        expect(result).toBeUnprocessableEntity({
+          error:
+            'Please provide a date of birth in the YYYY-MM-DD format.',
           name: 'Hercules',
           dob: 'unknown'
         });
@@ -189,14 +171,10 @@ describe('/birthdays - default action', () => {
         );
       });
 
-      it('should return a 422 code', () => {
-        expect(result.status).toEqual(422);
-      });
-
-      it('should return a useful message', () => {
-        expect(result.data.error).toEqual(
-          'An unknown ID was provided.'
-        );
+      it('should return a complete error message', () => {
+        expect(result).toBeUnprocessableEntity({
+          error: 'An unknown ID was provided.'
+        });
       });
     });
 
@@ -213,14 +191,18 @@ describe('/birthdays - default action', () => {
             id: storedId()
           })
         );
-        expect(result.data).toContain({ id: storedId() });
+        expect(result).toBeUnprocessableEntity({
+          id: storedId()
+        });
       });
-
+      // 19 december test english (read, vocab), is global warming a serioues probem write one paragraph
       it('should return the id when an empty date of birth is provided', async () => {
         const result = await performFormAction(
           createBirthday('Hercules', '', { id: storedId() })
         );
-        expect(result.data).toContain({ id: storedId() });
+        expect(result).toBeUnprocessableEntity({
+          id: storedId()
+        });
       });
     });
   });

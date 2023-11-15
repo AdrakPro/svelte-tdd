@@ -1,6 +1,5 @@
 import Page from '$routes/birthdays/+page.svelte';
 import { render, screen } from '@testing-library/svelte';
-import { beforeEach } from 'vitest';
 import { click } from '@testing-library/user-event';
 import { createBirthday } from '$factories/birthday.js';
 
