@@ -55,7 +55,7 @@ describe('/birthdays', () => {
         name: 'Edit'
       })[0];
 
-    it('hides the existing birthday information', async () => {
+    it('should hide the existing birthday information', async () => {
       await click(firstEditButton());
       expect(screen.queryByText('Hercules')).toBeNull();
     });
