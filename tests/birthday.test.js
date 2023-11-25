@@ -1,14 +1,14 @@
 import { expect, test } from '@playwright/test';
 import { BirthdayListPage } from './BirthdayListPage.js';
 
-test('lists all birthdays', async ({ page }) => {
+test('lists all birthday', async ({ page }) => {
   const birthdayListPage = new BirthdayListPage(page);
   await birthdayListPage.goto();
   await expect(
-    birthdayListPage.entryFor('Athena')
+    birthdayListPage.entryFor('Hercules')
   ).toBeVisible();
   await expect(
-    birthdayListPage.entryFor('Hercules')
+    birthdayListPage.entryFor('Athena')
   ).toBeVisible();
 });
 
@@ -30,15 +30,15 @@ test('does not save a birthday if there are validation errors', async ({
   const birthdayListPage = new BirthdayListPage(page);
   await birthdayListPage.goto();
   await birthdayListPage.saveNameAndDateOfBirth(
-    'Persephone',
+    'Demeter',
     'invalid'
   );
   await expect(
-    birthdayListPage.entryFor('Persephone')
+    birthdayListPage.entryFor('Demeter')
   ).not.toBeVisible();
   await expect(
     page.getByText(
-      'Please provide a date of birth in the YYYY-MM-DD format'
+      'Please provide a date of birth in the YYYY-MM-DD format.'
     )
   ).toBeVisible();
 });
@@ -47,19 +47,20 @@ test('edits a birthday', async ({ page }) => {
   const birthdayListPage = new BirthdayListPage(page);
   await birthdayListPage.goto();
   await birthdayListPage.saveNameAndDateOfBirth(
-    'Persephone',
+    'Ares',
     '1985-01-01'
   );
-  await birthdayListPage.beginEditingFor('Persephone');
+  await birthdayListPage.beginEditingFor('Ares');
   await birthdayListPage.saveNameAndDateOfBirth(
-    'Persephone',
+    'Ares',
     '1995-01-01'
   );
 
   await expect(
-    birthdayListPage.entryFor('Persephone')
+    birthdayListPage.entryFor('Ares')
   ).not.toContainText('1985-01-01');
+
   await expect(
-    birthdayListPage.entryFor('Persephone')
+    birthdayListPage.entryFor('Ares')
   ).toContainText('1995-01-01');
 });
