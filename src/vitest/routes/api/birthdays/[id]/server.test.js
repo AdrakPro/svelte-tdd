@@ -1,4 +1,3 @@
-import { beforeEach } from 'vitest';
 import * as birthdayRepository from '$lib/server/birthdayRepository.js';
 import { createBirthday } from '$factories/birthday.js';
 import { createRequest } from '$factories/request.js';
