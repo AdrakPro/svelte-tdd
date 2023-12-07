@@ -13,14 +13,17 @@
   {#each data.birthdays as birthday}
     <li>
       {#if editing?.id === birthday.id}
-        <BirthdayForm form={editing} />
+        <BirthdayForm
+          form={editing}
+          on:cancel={() => (editing = null)}
+        />
       {:else}
         <Birthday name={birthday.name} dob={birthday.dob} />
       {/if}
       {#if !editing}
         <button on:click={() => (editing = birthday)}
-          >Edit</button
-        >
+          >Edit
+        </button>
       {/if}
     </li>
   {/each}
