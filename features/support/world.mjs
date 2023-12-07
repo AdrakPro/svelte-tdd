@@ -2,6 +2,7 @@ import * as childProcess from 'child_process';
 import { setWorldConstructor } from '@cucumber/cucumber';
 import kill from 'tree-kill-promise';
 import { chromium, request } from '@playwright/test';
+import config from '../../playwright.config.js';
 
 // For execution environment that will return color codes in the stdout stream data
 const removeAnsiColorCodes = (string) =>

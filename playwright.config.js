@@ -5,7 +5,11 @@ const config = {
     port: 4173
   },
   testDir: 'tests',
-  testMatch: /(.+\.)?(test|spec)\.[jt]s/
+  testMatch: /(.+\.)?(test|spec)\.[jt]s/,
+  env: {
+    PATH: process.env.PATH,
+    VITE_ALLOW_CREDENTIALS: true
+  }
 };
 
 export default config;
