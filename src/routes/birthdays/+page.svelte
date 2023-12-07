@@ -48,5 +48,7 @@
     margin: 5px;
     border: 1px solid #ccc;
     border-radius: 2px;
+    display: flex;
+    align-items: center;
   }
 </style>

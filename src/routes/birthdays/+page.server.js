@@ -1,5 +1,4 @@
 import { fail } from '@sveltejs/kit';
-
 export const load = async ({ fetch }) => {
   const result = await fetch('/api/birthdays');
   return result.json();
@@ -14,7 +13,7 @@ export const actions = {
 
     let response;
     if (id) {
-      response = await fetch(`/api/birthday/${id}`, {
+      response = await fetch(`/api/birthdays/${id}`, {
         method: 'PUT',
         body: JSON.stringify({ name, dob })
       });
