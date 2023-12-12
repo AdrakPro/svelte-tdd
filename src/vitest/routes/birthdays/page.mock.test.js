@@ -6,19 +6,13 @@ import Birthday from '$lib/Birthday.svelte';
 import BirthdayForm from '$lib/BirthdayForm.svelte';
 import { click } from '@testing-library/user-event';
 
-vi.mock(
-  '$nextBirthday.test.js/Birthday.svelte',
-  async () => ({
-    default: componentDouble('Birthday')
-  })
-);
+vi.mock('$lib/Birthday.svelte', async () => ({
+  default: componentDouble('Birthday')
+}));
 
-vi.mock(
-  '$nextBirthday.test.js/BirthdayForm.svelte',
-  async () => ({
-    default: componentDouble('BirthdayForm')
-  })
-);
+vi.mock('$lib/BirthdayForm.svelte', async () => ({
+  default: componentDouble('BirthdayForm')
+}));
 
 const firstEditButton = () =>
   screen.queryAllByRole('button', {
