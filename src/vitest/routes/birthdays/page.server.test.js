@@ -9,12 +9,23 @@ import {
   fetchResponseError,
   fetchResponseOk
 } from '$factories/fetch.js';
+import {
+  loggedInSession,
+  loggedOutSession,
+  loggedInLocalsSession,
+  loggedOutLocalsSession
+} from '$factories/session.js';
 
 describe('/birthdays - load', () => {
+  const parent = vi.fn();
+  beforeEach(() =>
+    parent.mockResolvedValue(loggedInSession())
+  );
+
   it('should call fetch with /api/birthdays', async () => {
     const fetch = vi.fn();
     fetch.mockResolvedValue(fetchResponseOk());
-    await load({ fetch });
+    await load({ fetch, parent });
     expect(fetch).toBeCalledWith('/api/birthdays');
   });
 
@@ -28,20 +39,33 @@ describe('/birthdays - load', () => {
     const result = await load({ fetch });
     expect(result).toEqual({ birthdays });
   });
+
+  it('should redirect if the request is not authorized', async () => {
+    parent.mockResolvedValue(loggedOutSession());
+    expect.hasAssertions();
+    try {
+      await load({ parent });
+    } catch (error) {
+      expect(error.status).toEqual(303);
+      expect(error.location).toEqual('/login');
+    }
+  });
 });
 
 describe('/birthdays - default action', () => {
   const fetch = vi.fn();
-
-  const performFormAction = (formData) =>
-    actions.default({
-      request: createFormDataRequest(formData),
-      fetch
-    });
+  let locals;
 
   beforeEach(() => {
     fetch.mockResolvedValue(fetchResponseOk());
+    locals = loggedInLocalsSession();
   });
+  const performFormAction = (formData) =>
+    actions.default({
+      request: createFormDataRequest(formData),
+      fetch,
+      locals
+    });
 
   describe('when adding a new birthday', () => {
     it('should request data from POST /api/birthdays', async () => {
@@ -133,6 +157,17 @@ describe('/birthdays - default action', () => {
         dob: '2009-02-02',
         id: '123'
       });
+    });
+  });
+
+  describe('when not authorized', () => {
+    beforeEach(() => {
+      locals = loggedOutLocalsSession();
+    });
+
+    it('should return a failure', async () => {
+      const result = await performFormAction({});
+      expect(result.status).toEqual(300);
     });
   });
 });
