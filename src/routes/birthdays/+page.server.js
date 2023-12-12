@@ -10,7 +10,7 @@ export const load = async ({ fetch, parent }) => {
 export const actions = {
   default: async ({ request, fetch, locals }) => {
     const session = await locals.getSession();
-    if (!session?.user) return fail(401);
+    if (!session?.user) return fail(300);
     const data = await request.formData();
     const id = data.get('id');
     const name = data.get('name');
@@ -18,7 +18,7 @@ export const actions = {
 
     let response;
     if (id) {
-      response = await fetch(`/api/birthdays/${id}`, {
+      response = await fetch(`/api/birthday/${id}`, {
         method: 'PUT',
         body: JSON.stringify({ name, dob })
       });
