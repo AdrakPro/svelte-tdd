@@ -36,7 +36,7 @@ test('updating a birthday', async ({ request }) => {
   const { id } = await newBirthday.json();
 
   const birthdays = await request.put(
-    `/api/birthday/${id}`,
+    `/api/birthdays/${id}`,
     {
       data: {
         name: 'Nyxx',

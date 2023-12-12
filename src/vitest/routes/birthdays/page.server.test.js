@@ -111,7 +111,7 @@ describe('/birthdays - default action', () => {
   });
 
   describe('when replacing an existing birthday', () => {
-    it('should request data from PUT /api/birthday/{id}', async () => {
+    it('should request data from PUT /api/birthdays/{id}', async () => {
       await performFormAction(
         createBirthday('Zeus', '2009-02-02', {
           id: '123'
@@ -119,7 +119,7 @@ describe('/birthdays - default action', () => {
       );
 
       expect(fetch).toBeCalledWith(
-        '/api/birthday/123',
+        '/api/birthdays/123',
         expect.objectContaining({ method: 'PUT' })
       );
     });

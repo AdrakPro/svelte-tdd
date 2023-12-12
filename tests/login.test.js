@@ -1,3 +1,5 @@
+import { test, expect } from '@playwright/test';
+
 test('does not log in if log in fails', async ({
   page
 }) => {

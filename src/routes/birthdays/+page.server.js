@@ -18,7 +18,7 @@ export const actions = {
 
     let response;
     if (id) {
-      response = await fetch(`/api/birthday/${id}`, {
+      response = await fetch(`/api/birthdays/${id}`, {
         method: 'PUT',
         body: JSON.stringify({ name, dob })
       });
