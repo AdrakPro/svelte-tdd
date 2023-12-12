@@ -19,7 +19,8 @@ export default defineConfig({
         __dirname,
         './src/factories'
       ),
-      $matchers: path.resolve(__dirname, './src/matchers')
+      $matchers: path.resolve(__dirname, './src/matchers'),
+      $stores: path.resolve(__dirname, './src/stores')
     }
   }
 });

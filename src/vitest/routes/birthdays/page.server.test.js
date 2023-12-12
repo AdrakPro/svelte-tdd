@@ -36,7 +36,7 @@ describe('/birthdays - load', () => {
     ];
     const fetch = vi.fn();
     fetch.mockResolvedValue(fetchResponseOk({ birthdays }));
-    const result = await load({ fetch });
+    const result = await load({ fetch, parent });
     expect(result).toEqual({ birthdays });
   });
 

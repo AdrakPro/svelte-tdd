@@ -2,6 +2,7 @@ import Page from '$routes/birthdays/+page.svelte';
 import { render, screen } from '@testing-library/svelte';
 import { click } from '@testing-library/user-event';
 import { createBirthday } from '$factories/birthday.js';
+import { birthdays as birthdaysStore } from '$stores/birthdays.js';
 
 describe('/birthdays', () => {
   const birthdays = [
@@ -46,6 +47,27 @@ describe('/birthdays', () => {
     expect(
       screen.queryAllByRole('button', { name: 'Edit' })
     ).toHaveLength(2);
+  });
+
+  it('should save the loaded birthdays into the birthdays store', () => {
+    let storedBirthdays;
+    birthdaysStore.subscribe(
+      (value) => (storedBirthdays = value)
+    );
+    render(Page, { data: { birthdays } });
+    expect(storedBirthdays).toEqual(birthdays);
+  });
+
+  it('should update the birthdays store when the component props change', async () => {
+    let storedBirthdays;
+    birthdaysStore.subscribe(
+      (value) => (storedBirthdays = value)
+    );
+    const { component } = render(Page, {
+      data: { birthdays }
+    });
+    await component.$set({ data: { birthdays: [] } });
+    expect(storedBirthdays).toEqual([]);
   });
 
   describe('when editing an existing birthday', () => {

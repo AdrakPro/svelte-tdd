@@ -1,9 +1,12 @@
 <script>
   import Birthday from '$lib/Birthday.svelte';
   import BirthdayForm from '$lib/BirthdayForm.svelte';
+  import { birthdays } from '$stores/birthdays.js';
 
   export let data;
   export let form = undefined;
+
+  $: birthdays.set(data.birthdays);
 
   let editing = form?.id ? form : null;
 </script>
