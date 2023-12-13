@@ -10,7 +10,7 @@ export const load = async ({ fetch, parent }) => {
 export const actions = {
   default: async ({ request, fetch, locals }) => {
     const session = await locals.getSession();
-    if (!session?.user) return fail(300);
+    if (!session?.user) return fail(401);
     const data = await request.formData();
     const id = data.get('id');
     const name = data.get('name');

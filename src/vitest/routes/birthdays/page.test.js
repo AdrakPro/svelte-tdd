@@ -23,10 +23,18 @@ describe('/birthdays', () => {
     ).toBeVisible();
   });
 
-  it('should display birthday list', () => {
+  it('should display all the birthdays passed to it', () => {
     render(Page, { data: { birthdays } });
-    expect(screen.queryByText('Hercules')).toBeVisible();
-    expect(screen.queryByText('Athena')).toBeVisible();
+    expect(
+      screen.queryByText('Hercules', {
+        selector: 'li *'
+      })
+    ).toBeVisible();
+    expect(
+      screen.queryByText('Athena', {
+        selector: 'li *'
+      })
+    ).toBeVisible();
   });
 
   it('should display a form for adding new birthday', () => {

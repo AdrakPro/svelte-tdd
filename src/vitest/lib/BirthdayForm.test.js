@@ -2,26 +2,28 @@ import BirthdayForm from '$lib/BirthdayForm.svelte';
 import { render, screen } from '@testing-library/svelte';
 
 describe('BirthdayForm.svelte', () => {
+  const form = undefined;
+
   it('should display a form', () => {
-    render(BirthdayForm);
+    render(BirthdayForm, { form });
     expect(screen.queryByRole('form')).toBeVisible();
   });
 
   it('should has a POST method', () => {
-    render(BirthdayForm);
+    render(BirthdayForm, { form });
     expect(screen.queryByRole('form').method).toEqual(
       'post'
     );
   });
 
   it('should has a submit button', () => {
-    render(BirthdayForm);
+    render(BirthdayForm, { form });
     expect(screen.queryByRole('button')).toBeVisible();
   });
 
   describe('name field', () => {
     it('should display a text field for the contact name', () => {
-      render(BirthdayForm);
+      render(BirthdayForm, { form });
       const field = screen.queryByLabelText('Name', {
         selector: 'input[type=text]'
       });
@@ -30,7 +32,7 @@ describe('BirthdayForm.svelte', () => {
     });
 
     it('should has a default blank value', () => {
-      render(BirthdayForm);
+      render(BirthdayForm, { form });
       expect(screen.queryByLabelText('Name')).toHaveValue(
         ''
       );
@@ -39,7 +41,7 @@ describe('BirthdayForm.svelte', () => {
 
   describe('date of birth field', () => {
     it('should display a text field for the date of birth', () => {
-      render(BirthdayForm);
+      render(BirthdayForm, { form });
       const field = screen.queryByLabelText(
         'Date of birth',
         { selector: 'input[type=text]' }
@@ -49,7 +51,7 @@ describe('BirthdayForm.svelte', () => {
     });
 
     it('should has a default blank value', () => {
-      render(BirthdayForm);
+      render(BirthdayForm, { form });
       expect(
         screen.queryByLabelText('Date of birth')
       ).toHaveValue('');
@@ -65,7 +67,7 @@ describe('BirthdayForm.svelte', () => {
     });
 
     it('should not include the id field if no id is present', () => {
-      render(BirthdayForm);
+      render(BirthdayForm, { form });
       expect(
         document.forms.birthday.elements.id
       ).not.toBeDefined();

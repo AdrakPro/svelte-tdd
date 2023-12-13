@@ -2,6 +2,7 @@
   import Birthday from '$lib/Birthday.svelte';
   import BirthdayForm from '$lib/BirthdayForm.svelte';
   import { birthdays } from '$stores/birthdays.js';
+  import NextBirthday from '$lib/NextBirthday.svelte';
 
   export let data;
   export let form = undefined;
@@ -12,6 +13,7 @@
 </script>
 
 <h1>Birthday list</h1>
+<NextBirthday />
 <ol>
   {#each data.birthdays as birthday}
     <li>

@@ -35,11 +35,11 @@ describe('NextBirthday', () => {
     ]);
     render(NextBirthday);
     await birthdaysStore.set([
-      createBirthday('Hercules', '2023-09-01'),
-      createBirthday('Ares', '2023-08-01')
+      createBirthday('Hercules', '1994-02-02'),
+      createBirthday('Ares', '1989-01-01')
     ]);
     expect(document.body).toHaveTextContent(
-      'Ares has the next birthday, on 2056-08-01'
+      'Ares has the next birthday, on 2057-01-01'
     );
   });
 });

@@ -10,18 +10,15 @@ const addBirthday = async (request, { name, dob }) => {
 const login = async ({ context, baseURL }) => {
   const response = await context.request.get('/auth/csrf');
   const { csrfToken } = await response.json();
-  const response2 = await context.request.post(
-    '/auth/callback/credentials',
-    {
-      form: {
-        username: 'api',
-        csrfToken
-      },
-      headers: {
-        origin: baseURL
-      }
+  await context.request.post('/auth/callback/credentials', {
+    form: {
+      username: 'api',
+      csrfToken
+    },
+    headers: {
+      origin: baseURL
     }
-  );
+  });
 };
 
 test.beforeEach(login);

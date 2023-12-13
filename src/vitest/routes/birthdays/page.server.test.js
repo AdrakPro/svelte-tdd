@@ -167,7 +167,7 @@ describe('/birthdays - default action', () => {
 
     it('should return a failure', async () => {
       const result = await performFormAction({});
-      expect(result.status).toEqual(300);
+      expect(result.status).toEqual(401);
     });
   });
 });

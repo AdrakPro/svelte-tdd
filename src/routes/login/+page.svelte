@@ -5,7 +5,7 @@
   export let data = {};
 </script>
 
-<h1>Please login</h1>
+<h1>Login</h1>
 <p>
   {#if $page.data.session}
     {#if $page.data.session.user?.image}
@@ -28,13 +28,13 @@
     <span class="notSignedInText"
       >You are not signed in</span
     >
-    {#each data.providers as authProvider}
-      <button
-        on:click={() =>
-          signIn(authProvider, {
-            callbackUrl: '/birthdays'
-          })}>Sign in with {authProvider}</button
-      >
-    {/each}
+    <button
+      on:click={() =>
+        signIn(data.providers, {
+          callbackUrl: '/birthdays'
+        })}>Sign in</button
+    >
+
+    <p>(Username: api)</p>
   {/if}
 </p>
