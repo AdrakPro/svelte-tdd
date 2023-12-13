@@ -1,38 +1,62 @@
-# create-svelte
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+# Svelte-TDD
 
-## Creating a project
+> sveltekit birthday reminder using TDD
 
-If you're seeing this, you've probably already done this step. Congrats!
+
+## Disclaimer
+
+The purpose of this project is to learn writing tests and understanding concepts like TDD, AAA, mocking, custom matchers and side-by-side implementation with general best practices.
+
+Notes: [click here](NOTES.md) :exclamation:
+
+This repository contains:
+- 85 unit tests (vitest)
+- 8 e2e tests (playwright)
+- 1 cucumber test
+
+Most of the code is from the book [Svelte with Test-Driven Development by Daniel Irvine](https://www.amazon.com/Svelte-Test-Driven-Development-Playwright-Cucumber-js/dp/1837638330).
+## Environment Variables
+
+In order to access GitHub auth you need to provide:
+
+- `GITHUB_ID`
+- `GITHUB_SECRET`
+
+You can also log in with credentials, username is `api`.
+## Run Locally
+
+Clone the project
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+  git clone https://github.com/AdrakPro/svelte-tdd.git
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Go to the project directory
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+  cd svelte-tdd
 ```
 
-## Building
-
-To create a production version of your app:
+Install dependencies
 
 ```bash
-npm run build
+  npm install
 ```
 
-You can preview the production build with `npm run preview`.
+Start the server
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+```bash
+  npm run dev
+```
+
+Run tests (unit and e2e)
+
+```bash
+  npm run test
+```
+
+## Feedback
+
+If you have any feedback, please reach out to me adam.makarewicz14@gmail.com
+
