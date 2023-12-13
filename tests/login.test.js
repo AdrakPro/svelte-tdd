@@ -4,19 +4,17 @@ test('does not log in if log in fails', async ({
   page
 }) => {
   await page.goto('/birthdays');
-  await expect(
-    page.getByText('Please login')
-  ).toBeVisible();
+  await expect(page.getByText('Login')).toBeVisible();
   await page.waitForLoadState('networkidle');
   await page
     .getByRole('button', {
-      name: /Sign in with credentials/i
+      name: /Sign in/i
     })
     .click();
   await page.getByRole('textbox').fill('unknown user');
   await page
     .getByRole('button', {
-      name: /Sign in with credentials/i
+      name: /Sign in with Credentials/i
     })
     .click();
   await expect(

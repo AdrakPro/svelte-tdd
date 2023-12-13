@@ -76,17 +76,17 @@ test('does not save a birthday if there are validation errors', async ({
 
 test('edits a birthday', async ({ page, request }) => {
   await addBirthday(request, {
-    name: 'Ares',
+    name: 'Zeus',
     dob: '1985-01-01'
   });
 
   const birthdayListPage = new BirthdayListPage(page);
   await birthdayListPage.goto();
   await birthdayListPage.saveNameAndDateOfBirth(
-    'Ares',
+    'Poseidon',
     '1985-01-01'
   );
-  await birthdayListPage.beginEditingFor('Ares');
+  await birthdayListPage.beginEditingFor('Poseidon');
   await birthdayListPage.saveNameAndDateOfBirth(
     'Ares',
     '1995-01-01'
