@@ -8,7 +8,7 @@
 
 The purpose of this project is to learn writing tests and understanding concepts like TDD, AAA, mocking, custom matchers and side-by-side implementation with general best practices.
 
-Notes: [click here](NOTES.md) :exclamation:
+Notes: [NOTES.md](NOTES.md) :exclamation:
 
 This repository contains:
 - 85 unit tests (vitest)
