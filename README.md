@@ -6,7 +6,7 @@
 
 ## Disclaimer
 
-The purpose of this project is to learn writing tests and understanding concepts like TDD, AAA, mocking, custom matchers and side-by-side implementation with general best practices.
+The goal of the project is to learn writing tests and understanding concepts like TDD, AAA, mocking, custom matchers and side-by-side implementation with general best practices.
 
 Notes: [NOTES.md](NOTES.md) :exclamation:
 
