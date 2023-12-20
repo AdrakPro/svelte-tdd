@@ -1,7 +1,7 @@
 
 # Svelte-TDD
 
-> sveltekit birthday reminder using TDD
+> Sveltekit birthday reminder using TDD
 
 
 ## Disclaimer
