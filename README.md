@@ -58,5 +58,5 @@ Run tests (unit and e2e)
 
 ## Feedback
 
-If you have any feedback, please reach out to me adam.makarewicz14@gmail.com
+If you have any feedback, please reach out to me adam.makarewicz@proton.me
 
